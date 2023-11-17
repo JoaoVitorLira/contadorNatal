@@ -1,26 +1,52 @@
-var relogio = setInterval(function relogioNatal() {
-    // Data atual
-    let agora = new Date();
 
-    // Data do Natal
-    let natal = new Date(agora.getFullYear(), 11, 25, 0, 0, 0);
+ // Função para calcular a diferença entre duas datas
+ function getTimeRemaining(endtime) {
+    const total = Date.parse(endtime) - Date.parse(new Date());
+    const seconds = Math.floor((total / 1000) % 60);
+    const minutes = Math.floor((total / 1000 / 60) % 60);
+    const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+    const days = Math.floor(total / (1000 * 60 * 60 * 24));
 
-    // Se o Natal já passou este ano, ajuste para o próximo ano
-    if (agora > natal) {
-        natal.setFullYear(agora.getFullYear() + 1);
+    return {
+        total,
+        days,
+        hours,
+        minutes,
+        seconds
+    };
+}
+
+// Função para exibir a contagem regressiva
+function initializeClock(endtime) {
+    const countdown = document.getElementById('countdown');
+    const progressBar = document.getElementById('progress');
+    const progressBarContainer = document.getElementById('progress-bar');
+
+    function updateClock() {
+        const t = getTimeRemaining(endtime);
+
+        countdown.innerHTML = `${t.days}d ${t.hours}h ${t.minutes}m ${t.seconds}s`;
+
+        const totalTime = Date.parse(endtime) - Date.parse(dataDeInicioDoProgresso);
+        const elapsedTime = totalTime - t.total;
+        const percentage = (elapsedTime / totalTime) * 100;
+
+        progressBar.style.width = `${percentage}%`;
+
+        if (t.total <= 0) {
+            clearInterval(timeinterval);
+            progressBar.style.width = '100%';
+        }
     }
 
-    // Calcula a diferença entre as datas
-    let diferenca = natal - agora;
+    updateClock(); // Chama a função uma vez para evitar atrasos na exibição
 
-    // Calcula dias, horas, minutos e segundos
-    let dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
-    let horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    let minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
-    let segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
+    const timeinterval = setInterval(updateClock, 1000);
+}
 
-    let tempo = (`${agora.getFullYear()} - ${dias}d ${horas}h ${minutos}m ${segundos}s`);
-    document.getElementById('natal').textContent = tempo
-}, 1000);
+const dataDeInicioDoProgresso = new Date("Oct 1, " + new Date().getFullYear() + " 00:00:00 GMT");
+// Define a data de término para o Natal deste ano
+const deadline = new Date("December 25, " + new Date().getFullYear() + " 00:00:00 GMT");
 
-relogioNatal();
+// Inicia a contagem regressiva
+initializeClock(deadline);

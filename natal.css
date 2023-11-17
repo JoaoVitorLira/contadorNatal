@@ -29,10 +29,23 @@ h1 {
     font-size: 35px;
 }
 
+#progress-bar {
+    margin-top: 20px;
+    width: 400px;
+    height: 20px;
+    background-color: #eee;
+    position: relative;
+    border-radius: 5px;
+    border: solid black 2px;
+}
+#progress {
+    height: 100%;
+    background-color: #4CAF50;
+    border-radius: 5px;
+    transition: 0.5s;
+}
 
-
-#natal {
-    margin-top: 100px;
-    font-size: 40px;
-    margin-bottom: 35px;
+.barra{
+    display: flex;
+    justify-content: center;
 }
